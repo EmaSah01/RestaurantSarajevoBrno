@@ -1,0 +1,140 @@
+:root {
+    --slide-count: 3;
+    --slide-height: 400px;  /* 🔥 Bigger images */
+    --slide-width: 700px;   /* 🔥 Bigger images */
+    --gap: 5px;            /* ✅ Smaller gap */
+    --time: 80s;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slider-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+}
+
+.slider-container::before,
+.slider-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 20px;
+    height: 100%;
+    z-index: 1;
+}
+
+.slider-container::before {
+    left: 0;
+    background-image: linear-gradient(to right, #702222, transparent);
+}
+
+.slider-container::after {
+    right: 0;
+    background-image: linear-gradient(to left, #700222, transparent);
+}
+
+@media (max-width: 1110px) {
+    :root {
+        --slide-height: 300px;
+        --slide-width: 500px;
+    }
+
+    .slider-container {
+        row-gap: 15px;
+    }
+}
+
+@media (max-width: 860px) {
+    :root {
+        --slide-width: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --slide-height: 200px;
+        --slide-width: 250px;
+    }
+
+    .slider-container {
+        row-gap: 10px;
+    }
+}
+
+/* === SLIDER CORE === */
+
+.slider {
+    position: relative;
+    width: 100%;
+    max-width: 1600px;  /* ✅ Bigger slider area */
+    height: calc(var(--slide-height) + 10px);
+    overflow: hidden;
+    margin: 0 auto;  /* center it */
+}
+
+.slider-track {
+    position: absolute;
+    top: 0;
+    display: flex;
+}
+
+.slide {
+    width: var(--slide-width);
+    height: var(--slide-height);
+    border: 2px solid rgba(180, 180, 180, 0.6);
+    border-radius: 10px;
+    margin: 0 var(--gap);  /* ✅ smaller gap */
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.slide img {
+    border-radius: inherit;
+    transition: all 0.5s ease-in;
+    user-select: none;
+}
+
+.slide img:hover {
+    transform: scale(1.05); /* ✅ only zoom, no rotation */
+}
+
+.scrollLeft {
+    animation: scrollLeft var(--time) linear infinite;
+}
+
+.scrollRight {
+    animation: scrollRight var(--time) linear infinite;
+}
+
+@keyframes scrollLeft {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(
+            calc(-1 * var(--slide-count) * var(--slide-width) + var(--gap) * 2)
+        );
+    }
+}
+
+@keyframes scrollRight {
+    100% {
+        transform: translateX(0);
+    }
+    0% {
+        transform: translateX(
+            calc(-1 * var(--slide-count) * var(--slide-width) + var(--gap) * 2)
+        );
+    }
+}
+
+/* Pause animation on hover */
+.slider-track:has(.slide img:hover) {
+    -webkit-animation-play-state: paused;
+    animation-play-state: paused;
+}
